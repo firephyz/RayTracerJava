@@ -1,0 +1,17 @@
+<tri>
+    <point>
+        1.0
+        0.0
+        0.5
+    </point>
+    <point>
+        1.0
+        1.0
+        1.0
+    </point>
+    <point>
+        0.5
+        2.0
+        1.0
+    </point>
+</tri>
