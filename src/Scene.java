@@ -119,4 +119,6 @@ public class Scene {
 		
 		return line;
 	}
+	
+	public ArrayList<Triangle> getTriangles() {return this.tris;}
 }
