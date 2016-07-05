@@ -24,8 +24,17 @@ public class RayTracer {
 	}
 	
 	public void render() {
-		canvas.setColor(Color.BLUE);
-		canvas.fillRect(100, 100, 1, 1);
+
+		for(int y = 0; y < Main.SCREEN_HEIGHT; ++y) {
+			for(int x = 0; x < Main.SCREEN_WIDTH; ++x) {
+				Color color = trace(camera.getRay(x, y));
+			}
+		}
+	}
+	
+	private Color trace(Ray ray) {
+		
+		return new Color(0, 0, 0);
 	}
 	
 	private void rotateScene() {

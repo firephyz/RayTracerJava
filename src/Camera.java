@@ -12,6 +12,10 @@ public class Camera {
 	public Point3D[] rotZ;
 	
 	private Point3D focalPoint;
+	private Point3D rightPoint;
+	private Point3D upperPoint;
+	
+	private final double pixelWidth = (double)2 / Main.SCREEN_WIDTH;
 	
 	public Camera(RayTracer tracer,
 				  double x, double y, double z, 
@@ -36,11 +40,34 @@ public class Camera {
 	public void init() {
 		
 		double focalLength = 1 / Math.tan(fov / 2);
+		focalPoint = new Point3D(-focalLength, 0, 0);
+		rightPoint = new Point3D(0, -1, 0);
+		upperPoint = new Point3D(0, 0, (double)Main.SCREEN_HEIGHT / Main.SCREEN_WIDTH); // Calculates length of upper point to keep aspect ratio
 		
-		focalPoint = tracer.rotatePoint(new Point3D(-focalLength, 0, 0));
+		/*
+		 * The following code to rotate the camera points is only necessary
+		 * if the camera is actually moving and the scene stays still
+		 * 
+		 */
+		// Positions the various points that specify the camera
+		// (the focal point, the screen point on the right and the screen point on the top
+		focalPoint = tracer.rotatePoint(focalPoint);
 		focalPoint.x *= -1;
 		focalPoint.y *= -1;
 		focalPoint.z *= -1;
+		rightPoint = tracer.rotatePoint(rightPoint);
+		rightPoint.x *= -1;
+		rightPoint.y *= -1;
+		rightPoint.z *= -1;
+		upperPoint = tracer.rotatePoint(upperPoint);
+		upperPoint.x *= -1;
+		upperPoint.y *= -1;
+		upperPoint.z *= -1;
+	}
+	
+	public Ray getRay(int x, int y) {
+		
+		return new Ray(focalPoint.x, focalPoint.y, focalPoint.z, vecX, vecY, vecZ);
 	}
 	
 	private void calcRotationMatricies() {
