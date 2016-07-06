@@ -1,16 +1,19 @@
+import java.awt.Color;
 import java.awt.Point;
 import java.util.Vector;
 
 
 public class Triangle {
 	
-	Point3D p1, p2, p3;
-	Point3D normal;
+	public Point3D p1, p2, p3;
+	public Point3D normal;
+	public Color color;
 	
-	public Triangle(Point3D p1, Point3D p2, Point3D p3) {
+	public Triangle(Point3D p1, Point3D p2, Point3D p3, Color color) {
 		this.p1 = p1;
 		this.p2 = p2;
 		this.p3 = p3;
+		this.color = color;
 		
 		calcNormal();
 	}

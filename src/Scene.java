@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -9,6 +10,7 @@ public class Scene {
 	
 	private Scanner data;
 	private ArrayList<Triangle> tris;
+	private Color defaultColor = new Color(0.5f, 0.5f, 0.5f);
 	
 	public Scene(String dir) {
 		
@@ -51,7 +53,7 @@ public class Scene {
 			
 			line = consumeBlankLines();
 			
-			Point3D p1 = parsePoint(Double.parseDouble(line));
+			Point3D p1 = parsePoint(Double.parseDouble(line.trim()));
 
 			line = consumeBlankLines();
 			
@@ -67,7 +69,7 @@ public class Scene {
 			
 			line = consumeBlankLines();
 			
-			Point3D p2 = parsePoint(Double.parseDouble(line));
+			Point3D p2 = parsePoint(Double.parseDouble(line.trim()));
 			
 			line = consumeBlankLines();
 			
@@ -83,9 +85,7 @@ public class Scene {
 			
 			line = consumeBlankLines();
 			
-			Point3D p3 = parsePoint(Double.parseDouble(line));
-			
-			tris.add(new Triangle(p1, p2, p3));
+			Point3D p3 = parsePoint(Double.parseDouble(line.trim()));
 			
 			line = consumeBlankLines();
 			
@@ -95,10 +95,45 @@ public class Scene {
 			
 			line = consumeBlankLines();
 			
-			if(!line.trim().equals("</tri>")) {
-				throw new ParseException("Missing ending triangle '</tri>' declaration.");
+			boolean hasNoColor = false;
+			Color color = defaultColor;
+			if(!line.trim().equals("<color>")) {
+				hasNoColor = true;
 			}
+			
+			if(hasNoColor) {
+				if(!line.trim().equals("</tri>")) {
+					throw new ParseException("Missing ending triangle '</tri>' declaration.");
+				}
+			}
+			else {
+				line = consumeBlankLines();
+				
+				color = parseColor(Double.parseDouble(line.trim()));
+				
+				line = consumeBlankLines();
+				
+				if(!line.trim().equals("</color>")) {
+					throw new ParseException("Missing ending color '</color>' declaration.");
+				}
+				
+				line = consumeBlankLines();
+				
+				if(!line.trim().equals("</tri>")) {
+					throw new ParseException("Missing ending triangle '</tri>' declaration.");
+				}
+			}
+			
+			tris.add(new Triangle(p1, p2, p3, color));
 		}
+	}
+	
+	private Color parseColor(double red) {
+		
+		double green  = data.nextDouble();
+		double blue = data.nextDouble();
+		
+		return new Color((float)red, (float)green, (float)blue);
 	}
 	
 	private Point3D parsePoint(double x) {

@@ -21,6 +21,7 @@ public class RayTracer {
 		camera.init();
 		
 		rotateScene();
+		translateScene();
 	}
 	
 	public void render() {
@@ -35,6 +36,23 @@ public class RayTracer {
 	private Color trace(Ray ray) {
 		
 		return new Color(0, 0, 0);
+	}
+	
+	private void translateScene() {
+		
+		for(Triangle tri : scene.getTriangles()) {
+			tri.p1.x = tri.p1.x - camera.pos.x;
+			tri.p1.y = tri.p1.y - camera.pos.y;
+			tri.p1.z = tri.p1.z - camera.pos.z;
+			
+			tri.p2.x = tri.p2.x - camera.pos.x;
+			tri.p2.y = tri.p2.y - camera.pos.y;
+			tri.p2.z = tri.p2.z - camera.pos.z;
+			
+			tri.p3.x = tri.p3.x - camera.pos.x;
+			tri.p3.y = tri.p3.y - camera.pos.y;
+			tri.p3.z = tri.p3.z - camera.pos.z;
+		}
 	}
 	
 	private void rotateScene() {

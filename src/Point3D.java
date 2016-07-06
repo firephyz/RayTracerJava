@@ -1,7 +1,7 @@
 
 public class Point3D {
 	
-	double x, y, z;
+	public double x, y, z;
 	
 	public Point3D() {
 		this(0, 0, 0);
@@ -11,5 +11,11 @@ public class Point3D {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+	
+	public Point3D(Point3D copy) {
+		this.x = copy.x;
+		this.y = copy.y;
+		this.z = copy.z;
 	}
 }

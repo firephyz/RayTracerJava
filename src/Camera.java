@@ -11,11 +11,9 @@ public class Camera {
 	public Point3D[] rotY;
 	public Point3D[] rotZ;
 	
-	private Point3D focalPoint;
-	private Point3D rightPoint;
-	private Point3D upperPoint;
-	
-	private final double pixelWidth = (double)2 / Main.SCREEN_WIDTH;
+	private double focalPoint;
+	private double leftPoint;
+	private double upperPoint;
 	
 	public Camera(RayTracer tracer,
 				  double x, double y, double z, 
@@ -39,10 +37,10 @@ public class Camera {
 	
 	public void init() {
 		
-		double focalLength = 1 / Math.tan(fov / 2);
-		focalPoint = new Point3D(-focalLength, 0, 0);
-		rightPoint = new Point3D(0, -1, 0);
-		upperPoint = new Point3D(0, 0, (double)Main.SCREEN_HEIGHT / Main.SCREEN_WIDTH); // Calculates length of upper point to keep aspect ratio
+		focalPoint = 1 / Math.tan(fov / 2);
+		leftPoint = 1.0;
+		// Calculates length of upper point to keep aspect ratio
+		upperPoint = (double)Main.SCREEN_HEIGHT / Main.SCREEN_WIDTH;
 		
 		/*
 		 * The following code to rotate the camera points is only necessary
@@ -51,23 +49,29 @@ public class Camera {
 		 */
 		// Positions the various points that specify the camera
 		// (the focal point, the screen point on the right and the screen point on the top
-		focalPoint = tracer.rotatePoint(focalPoint);
-		focalPoint.x *= -1;
-		focalPoint.y *= -1;
-		focalPoint.z *= -1;
-		rightPoint = tracer.rotatePoint(rightPoint);
-		rightPoint.x *= -1;
-		rightPoint.y *= -1;
-		rightPoint.z *= -1;
-		upperPoint = tracer.rotatePoint(upperPoint);
-		upperPoint.x *= -1;
-		upperPoint.y *= -1;
-		upperPoint.z *= -1;
+//		focalPoint = tracer.rotatePoint(focalPoint);
+//		focalPoint.x *= -1;
+//		focalPoint.y *= -1;
+//		focalPoint.z *= -1;
+//		rightPoint = tracer.rotatePoint(rightPoint);
+//		rightPoint.x *= -1;
+//		rightPoint.y *= -1;
+//		rightPoint.z *= -1;
+//		upperPoint = tracer.rotatePoint(upperPoint);
+//		upperPoint.x *= -1;
+//		upperPoint.y *= -1;
+//		upperPoint.z *= -1;
 	}
 	
 	public Ray getRay(int x, int y) {
 		
-		return new Ray(focalPoint.x, focalPoint.y, focalPoint.z, vecX, vecY, vecZ);
+		double pixelWidth = 2 * leftPoint / Main.SCREEN_WIDTH;
+		
+		double xPos = 0;
+		double yPos = 1 - (x * pixelWidth) - pixelWidth / 2;
+		double zPos = 1 - (y * pixelWidth) - pixelWidth / 2;
+		Point3D endPoint = new Point3D(xPos, yPos, zPos);
+		return new Ray(new Point3D(0, -focalPoint, 0), endPoint);
 	}
 	
 	private void calcRotationMatricies() {
