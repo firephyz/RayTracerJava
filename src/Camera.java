@@ -65,13 +65,15 @@ public class Camera {
 	
 	public Ray getRay(int x, int y) {
 		
+		Point3D startPoint = new Point3D(-focalPoint, 0, 0);
+		
 		double pixelWidth = 2 * leftPoint / Main.SCREEN_WIDTH;
 		
 		double xPos = 0;
 		double yPos = 1 - (x * pixelWidth) - pixelWidth / 2;
 		double zPos = 1 - (y * pixelWidth) - pixelWidth / 2;
-		Point3D endPoint = new Point3D(xPos, yPos, zPos);
-		return new Ray(new Point3D(0, -focalPoint, 0), endPoint);
+		Point3D vector = new Point3D(xPos - startPoint.x, yPos, zPos);
+		return new Ray(startPoint, vector);
 	}
 	
 	private void calcRotationMatricies() {

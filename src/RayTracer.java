@@ -62,8 +62,29 @@ public class RayTracer {
 		double distance = -1;
 		
 		/*
-		 * Implementation
+		 * Calculate the vectors for two triangle sides and then
+		 * one from the ray starting point to the first triangle vertex
 		 */
+		Point3D r1 = new Point3D(tri.p2.x - tri.p1.x, 
+								 tri.p2.y - tri.p1.y, 
+								 tri.p2.z - tri.p1.z);
+		Point3D r2 = new Point3D(tri.p3.x - tri.p1.x, 
+								 tri.p3.y - tri.p1.y, 
+								 tri.p3.z - tri.p1.z);
+		Point3D c = new Point3D(ray.p.x - tri.p1.x,
+								ray.p.y - tri.p1.y,
+								ray.p.z - tri.p1.z);
+		
+		Matrix mat = new Matrix(3);
+		double[][] nums =
+			{
+				{r1.x, r2.x, -ray.v.x},
+				{r1.y, r2.y, -ray.v.y},
+				{r1.z, r2.z, -ray.v.z},
+			};
+		mat.fill(nums);
+		System.out.println(mat);
+		double determinant = mat.getDeterminant();
 		
 		return distance;
 	}
