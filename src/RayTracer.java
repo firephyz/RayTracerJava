@@ -35,7 +35,37 @@ public class RayTracer {
 	
 	private Color trace(Ray ray) {
 		
-		return new Color(0, 0, 0);
+		double closestDistance = Double.MAX_VALUE;
+		Color closestColor = scene.ambientColor;
+		
+		for(Triangle tri : scene.getTriangles()) {
+			
+			// Run the intersection algorithm
+			double distance = calcMollerTrumbore(ray, tri);
+			
+			// distance less than zero means we didn't intersect or it doesn't matter
+			if (distance > 0) {
+				
+				// If this triangle is closer to this pixel, use this triangle's color instead
+				if (distance < closestDistance) {
+					closestDistance = distance;
+					closestColor = tri.color;
+				}
+			}
+		}
+		
+		return closestColor;
+	}
+	
+	private double calcMollerTrumbore(Ray ray, Triangle tri) {
+		
+		double distance = -1;
+		
+		/*
+		 * Implementation
+		 */
+		
+		return distance;
 	}
 	
 	private void translateScene() {

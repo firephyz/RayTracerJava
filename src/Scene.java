@@ -10,6 +10,8 @@ public class Scene {
 	
 	private Scanner data;
 	private ArrayList<Triangle> tris;
+	
+	public Color ambientColor = new Color(0.8f, 0.8f, 0.8f);
 	private Color defaultColor = new Color(0.5f, 0.5f, 0.5f);
 	
 	public Scene(String dir) {
