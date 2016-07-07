@@ -75,6 +75,9 @@ public class RayTracer {
 								ray.p.y - tri.p1.y,
 								ray.p.z - tri.p1.z);
 		
+		/*
+		 * Construct the big matrix we will be working with
+		 */
 		Matrix mat = new Matrix(3);
 		double[][] nums =
 			{
@@ -83,10 +86,111 @@ public class RayTracer {
 				{r1.z, r2.z, -ray.v.z},
 			};
 		mat.fill(nums);
-		System.out.println(mat);
-		double determinant = mat.getDeterminant();
+		
+		/*
+		 * Calculate the inverse of that matrix using that determinant
+		 */
+		Matrix inverse = calcInverse(mat);
+		
+		/*
+		 * Multiply that inverse with Point3D 'c' to solve for t, u, and v
+		 */
+		
+		/*
+		 * If t, u, v are valid, return the distance to intersection, else return the original -1
+		 */
 		
 		return distance;
+	}
+	
+	private Matrix calcInverse(Matrix mat) {
+		
+		// Find the determinant
+		double determinant = mat.getDeterminant();
+		
+		// Do matrix magic
+		double[][] temp = new double[2][2];
+		
+		// First row
+		Matrix m00 = new Matrix(2);
+		temp[0][0] = mat.get(1, 1);
+		temp[0][1] = mat.get(1, 2);
+		temp[1][0] = mat.get(2, 1);
+		temp[1][1] = mat.get(2, 2);
+		m00.fill(temp);
+		
+		Matrix m10 = new Matrix(2);
+		temp[0][0] = mat.get(0, 2);
+		temp[0][1] = mat.get(0, 1);
+		temp[1][0] = mat.get(2, 2);
+		temp[1][1] = mat.get(2, 1);
+		m10.fill(temp);
+		
+		Matrix m20 = new Matrix(2);
+		temp[0][0] = mat.get(0, 1);
+		temp[0][1] = mat.get(0, 2);
+		temp[1][0] = mat.get(1, 1);
+		temp[1][1] = mat.get(1, 2);
+		m20.fill(temp);
+		
+		// Second row
+		Matrix m01 = new Matrix(2);
+		temp[0][0] = mat.get(1, 2);
+		temp[0][1] = mat.get(1, 0);
+		temp[1][0] = mat.get(2, 2);
+		temp[1][1] = mat.get(2, 0);
+		m01.fill(temp);
+		
+		Matrix m11 = new Matrix(2);
+		temp[0][0] = mat.get(0, 0);
+		temp[0][1] = mat.get(0, 2);
+		temp[1][0] = mat.get(2, 0);
+		temp[1][1] = mat.get(2, 2);
+		m11.fill(temp);
+		
+		Matrix m21 = new Matrix(2);
+		temp[0][0] = mat.get(0, 2);
+		temp[0][1] = mat.get(0, 0);
+		temp[1][0] = mat.get(1, 2);
+		temp[1][1] = mat.get(1, 0);
+		m21.fill(temp);
+		
+		// Third row
+		Matrix m02 = new Matrix(2);
+		temp[0][0] = mat.get(1, 0);
+		temp[0][1] = mat.get(1, 1);
+		temp[1][0] = mat.get(2, 0);
+		temp[1][1] = mat.get(2, 1);
+		m02.fill(temp);
+		
+		Matrix m12 = new Matrix(2);
+		temp[0][0] = mat.get(0, 1);
+		temp[0][1] = mat.get(0, 0);
+		temp[1][0] = mat.get(2, 1);
+		temp[1][1] = mat.get(2, 0);
+		m12.fill(temp);
+		
+		Matrix m22 = new Matrix(2);
+		temp[0][0] = mat.get(0, 0);
+		temp[0][1] = mat.get(0, 1);
+		temp[1][0] = mat.get(1, 0);
+		temp[1][1] = mat.get(1, 1);
+		m22.fill(temp);
+		
+		/*
+		 * Construct the inverse from that magic
+		 */
+		Matrix inverse = new Matrix(3);
+		double[][] invNums = 
+			{
+				{m00.getDeterminant(), m10.getDeterminant(), m20.getDeterminant()},
+				{m01.getDeterminant(), m11.getDeterminant(), m21.getDeterminant()},
+				{m02.getDeterminant(), m12.getDeterminant(), m22.getDeterminant()},
+			};
+		inverse.fill(invNums);
+		inverse.mult(determinant);
+		
+		return inverse;
 	}
 	
 	private void translateScene() {

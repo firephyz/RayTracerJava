@@ -39,8 +39,22 @@ public class Matrix {
 		}
 	}
 	
+	// Multiplies a matrix by the given scalar
+	public void mult(double num) {
+		
+		for(int row = 0; row < size; ++row) {
+			for(int col = 0; col < size; ++col) {
+				data.get(row).set(col, data.get(row).get(col) * num);
+			}
+		}
+	}
+	
 	public double getDeterminant() {
 		return getDeterminantHelper(this);
+	}
+	
+	public double get(int row, int col) {
+		return data.get(row).get(col);
 	}
 	
 	private double getDeterminantHelper(Matrix mat) {
